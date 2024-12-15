@@ -73,7 +73,7 @@ export class Task {
 
     const formatedDate = format(this._date, "y-MM-dd");
 
-    return this._getEmojiByStatus() + formatedDate;
+    return this._getEmojiByStatus() + " " + formatedDate;
   }
 
   private _tagsToString(): string | null {
