@@ -1,3 +1,4 @@
+import { TreeNode } from "./Parser";
 import { exist } from "./utils";
 import { format } from "date-fns";
 
@@ -15,7 +16,7 @@ export interface TaskCreateParams {
   date: Date | null;
 }
 
-export class Task {
+export class Task implements TreeNode {
   private _children: Task[];
   private _parent: Task | null;
   private _title: string;
@@ -46,6 +47,22 @@ export class Task {
 
       case TaskStatus.Canceled:
         return "-";
+    }
+  }
+
+  public static getStatusFromSymbol(symbol: string): TaskStatus {
+    switch (symbol) {
+      case "x":
+        return TaskStatus.Done;
+
+      case " ":
+        return TaskStatus.Todo;
+
+      case "-":
+        return TaskStatus.Canceled;
+
+      default:
+        throw new Error("Undefined symbol");
     }
   }
 
