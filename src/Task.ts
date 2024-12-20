@@ -1,6 +1,4 @@
 import { TreeNode } from "./Parser";
-import { exist } from "./utils";
-import { format } from "date-fns";
 
 export type Tag = string;
 export enum TaskStatus {
@@ -24,6 +22,19 @@ export class Task implements TreeNode {
   private _status: TaskStatus;
   private _date: Date | null;
 
+  public get title() {
+    return this._title;
+  }
+  public get tags() {
+    return this._tags;
+  }
+  public get status() {
+    return this._status;
+  }
+  public get date() {
+    return this._date;
+  }
+
   constructor(p: TaskCreateParams, parent: Task | null = null) {
     this._title = p.title;
     this._tags = p.tags;
@@ -35,79 +46,5 @@ export class Task implements TreeNode {
   public appendChild(task: Task) {
     task._parent = this;
     this._children.push(task);
-  }
-
-  private _getSymbolByStatus(): string {
-    switch (this._status) {
-      case TaskStatus.Done:
-        return "x";
-
-      case TaskStatus.Todo:
-        return " ";
-
-      case TaskStatus.Canceled:
-        return "-";
-    }
-  }
-
-  public static getStatusFromSymbol(symbol: string): TaskStatus {
-    switch (symbol) {
-      case "x":
-        return TaskStatus.Done;
-
-      case " ":
-        return TaskStatus.Todo;
-
-      case "-":
-        return TaskStatus.Canceled;
-
-      default:
-        throw new Error("Undefined symbol");
-    }
-  }
-
-  private _getEmojiByStatus(): string {
-    switch (this._status) {
-      case TaskStatus.Done:
-        return "✅";
-
-      case TaskStatus.Todo:
-        return "";
-
-      case TaskStatus.Canceled:
-        return "❌";
-    }
-  }
-
-  private _statusToString(): string {
-    const symbol = this._getSymbolByStatus();
-
-    return `[${symbol}]`;
-  }
-
-  private _dateToString(): string | null {
-    if (this._status === TaskStatus.Todo || !this._date) return null;
-
-    const formatedDate = format(this._date, "y-MM-dd");
-
-    return this._getEmojiByStatus() + " " + formatedDate;
-  }
-
-  private _tagsToString(): string | null {
-    const tagString = this._tags.map((tag) => `#${tag}`).join(" ");
-
-    return tagString === "" ? null : tagString;
-  }
-
-  public toString() {
-    const taskParts = [
-      "-",
-      this._statusToString(),
-      this._title,
-      this._tagsToString(),
-      this._dateToString(),
-    ].filter(exist) as string[];
-
-    return taskParts.join(" ");
   }
 }

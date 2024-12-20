@@ -2,72 +2,118 @@ import { Task, TaskCreateParams, TaskStatus } from "./Task";
 import { TaskParser } from "./TaskParser";
 import { generateTests, TestCase } from "./testUtils";
 
-const testTaskToString = async (result: TaskCreateParams, params: string) => {
-  const task = new Task(result);
-  expect(TaskParser(params)[0]).toEqual(task);
-};
-
-const testCases: TestCase<[string], TaskCreateParams>[] = [
+const taskToString: MapItem[] = [
   {
     name: "todo task, without tags",
-    result: {
+    task: {
       title: "todo task, without tags",
       tags: [],
       status: TaskStatus.Todo,
       date: null,
     },
-    args: ["- [ ] todo task, without tags"],
+    str: "- [ ] todo task, without tags",
   },
   {
     name: "done task, without tags",
-    result: {
+    task: {
       title: "done task, without tags",
       tags: [],
       status: TaskStatus.Done,
       date: new Date("2000-09-11"),
     },
-    args: ["- [x] done task, without tags ✅ 2000-09-11"],
+    str: "- [x] done task, without tags ✅ 2000-09-11",
   },
   {
     name: "canceled task, without tags",
-    result: {
+    task: {
       title: "canceled task, without tags",
       tags: [],
       status: TaskStatus.Canceled,
       date: new Date("2000-09-11"),
     },
-    args: ["- [-] canceled task, without tags ❌ 2000-09-11"],
+    str: "- [-] canceled task, without tags ❌ 2000-09-11",
   },
   {
     name: "todo task, with tags",
-    result: {
+    task: {
       title: "todo task, with tags",
       tags: ["tag1", "tag2"],
       status: TaskStatus.Todo,
       date: null,
     },
-    args: ["- [ ] todo task, with tags #tag1 #tag2"],
+    str: "- [ ] todo task, with tags #tag1 #tag2",
   },
   {
     name: "done task, with tags",
-    result: {
+    task: {
       title: "done task, with tags",
       tags: ["tag1", "tag2"],
       status: TaskStatus.Done,
       date: new Date("2000-09-11"),
     },
-    args: ["- [x] done task, with tags #tag1 #tag2 ✅ 2000-09-11"],
+    str: "- [x] done task, with tags #tag1 #tag2 ✅ 2000-09-11",
   },
   {
     name: "canceled task, with tags",
-    result: {
+    task: {
       title: "canceled task, with tags",
       tags: ["tag1", "tag2"],
       status: TaskStatus.Canceled,
       date: new Date("2000-09-11"),
     },
-    args: ["- [-] canceled task, with tags #tag1 #tag2 ❌ 2000-09-11"],
+    str: "- [-] canceled task, with tags #tag1 #tag2 ❌ 2000-09-11",
   },
 ];
 
-generateTests(testCases, testTaskToString);
+const testStringToTask = async (result: TaskCreateParams, params: string) => {
+  const task = new Task(result);
+  const parser = new TaskParser();
+  expect(parser.stringToEntity(params)[0]).toEqual(task);
+};
+
+const testTaskToString = async (result: string, params: TaskCreateParams) => {
+  const task = new Task(params);
+  const parser = new TaskParser();
+  expect(parser.entityToString(task)).toEqual(result);
+};
+
+type MapItem = {
+  name: string;
+  task: TaskCreateParams;
+  str: string;
+};
+
+type MapToTestCase<TestArgs extends unknown[], Result> = (
+  name: string,
+  map: MapItem[]
+) => TestCase<TestArgs, Result>[];
+
+const mapToTaskTestCases: MapToTestCase<[string], TaskCreateParams> = (
+  name,
+  map
+) => {
+  return map.map(({ name: caseName, task, str }) => ({
+    name: `${name}: ${caseName}`,
+    args: [str],
+    result: task,
+  }));
+};
+const mapToStringTestCases: MapToTestCase<[TaskCreateParams], string> = (
+  name,
+  map
+) => {
+  return map.map(({ name: caseName, task, str }) => ({
+    name: `${name}: ${caseName}`,
+    args: [task],
+    result: str,
+  }));
+};
+
+generateTests(
+  mapToTaskTestCases("parse string to task", taskToString),
+  testStringToTask
+);
+generateTests(
+  mapToStringTestCases("parse task to string", taskToString),
+  testTaskToString
+);
