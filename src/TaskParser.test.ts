@@ -2,7 +2,7 @@ import { Task, TaskCreateParams, TaskStatus } from "./Task";
 import { TaskParser } from "./TaskParser";
 import { generateTests, TestCase } from "./testUtils";
 
-const taskToString: MapItem[] = [
+const taskToString: MapListItem[] = [
   {
     name: "todo task, without tags",
     task: {
@@ -77,18 +77,18 @@ const testTaskToString = async (result: string, params: TaskCreateParams) => {
   expect(parser.entityToString(task)).toEqual(result);
 };
 
-type MapItem = {
+type MapListItem = {
   name: string;
   task: TaskCreateParams;
   str: string;
 };
 
-type MapToTestCase<TestArgs extends unknown[], Result> = (
+type MapListToTestCase<TestArgs extends unknown[], Result> = (
   name: string,
-  map: MapItem[]
+  map: MapListItem[]
 ) => TestCase<TestArgs, Result>[];
 
-const mapToTaskTestCases: MapToTestCase<[string], TaskCreateParams> = (
+const mapToTaskTestCases: MapListToTestCase<[string], TaskCreateParams> = (
   name,
   map
 ) => {
@@ -98,7 +98,7 @@ const mapToTaskTestCases: MapToTestCase<[string], TaskCreateParams> = (
     result: task,
   }));
 };
-const mapToStringTestCases: MapToTestCase<[TaskCreateParams], string> = (
+const mapToStringTestCases: MapListToTestCase<[TaskCreateParams], string> = (
   name,
   map
 ) => {
