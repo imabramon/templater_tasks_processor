@@ -1,6 +1,22 @@
 import { Task, TaskCreateParams, TaskStatus } from "./Task";
 import { TaskParser } from "./TaskParser";
-import { generateTests, TestCase } from "./testUtils";
+
+interface TestCase<TestArgs extends unknown[], Result> {
+  name: string;
+  args: TestArgs;
+  result: Result;
+}
+
+const generateTests = <TestArgs extends unknown[], Result>(
+  testCases: TestCase<TestArgs, Result>[],
+  check: (result: Result, ...args: TestArgs) => Promise<void> | void
+) => {
+  testCases.forEach((testCase) => {
+    test(testCase.name, async () => {
+      await check(testCase.result, ...testCase.args);
+    });
+  });
+};
 
 const taskToString: MapListItem[] = [
   {
@@ -68,7 +84,7 @@ const taskToString: MapListItem[] = [
 const testStringToTask = async (result: TaskCreateParams, params: string) => {
   const task = new Task(result);
   const parser = new TaskParser();
-  expect(parser.stringToEntity(params)[0]).toEqual(task);
+  expect(parser.stringToEntity(params)).toEqual(task);
 };
 
 const testTaskToString = async (result: string, params: TaskCreateParams) => {

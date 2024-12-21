@@ -15,7 +15,7 @@ export interface TaskCreateParams {
 }
 
 export class Task implements TreeNode {
-  private _children: Task[];
+  private _children: Task[] = [];
   private _parent: Task | null;
   private _title: string;
   private _tags: Tag[];
@@ -41,6 +41,15 @@ export class Task implements TreeNode {
     this._date = p.date;
     this._status = p.status;
     this._parent = parent;
+  }
+
+  public append(children: Task | Task[]) {
+    if (Array.isArray(children)) {
+      children.forEach((child) => this.appendChild(child));
+      return;
+    }
+
+    this.appendChild(children);
   }
 
   public appendChild(task: Task) {

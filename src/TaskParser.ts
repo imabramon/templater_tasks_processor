@@ -3,14 +3,12 @@ import { EntityParser } from "./EntityParser";
 import { Task, TaskStatus } from "./Task";
 import { exist } from "./utils";
 
-const TabRegEx = /^(\t*)/g;
 const StatusRegEx = /- \[([ x-])\]/;
 const TagRegEx = /#(\w*)/g;
 const DateRegEx = /[✅❌]\s(\d{4}-\d{2}-\d{2})/;
 
 export class TaskParser implements EntityParser<Task> {
   public stringToEntity = (str: string) => {
-    const tabs = TabRegEx.exec(str)?.[1] ?? "";
     const status = this._getStatusFromSymbol(StatusRegEx.exec(str)?.[1] ?? " ");
     const tags = [...str.matchAll(TagRegEx)].map((match) => match[1]);
 
@@ -22,15 +20,12 @@ export class TaskParser implements EntityParser<Task> {
       .replace(DateRegEx, "")
       .trim();
 
-    return [
-      new Task({
-        status,
-        title,
-        tags,
-        date: date ? new Date(date) : null,
-      }),
-      tabs.length,
-    ] as [Task, number];
+    return new Task({
+      status,
+      title,
+      tags,
+      date: date ? new Date(date) : null,
+    });
   };
 
   private _getStatusFromSymbol(symbol: string): TaskStatus {
