@@ -1,3 +1,11 @@
+import { testSelector } from "./Selector";
 import { TaskList } from "./TaskList";
 
-module.exports = TaskList
+const exportObsidian = () => {
+  return {
+    testSelector,
+    TaskList,
+  };
+};
+
+module.exports = exportObsidian;
