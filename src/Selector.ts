@@ -1,10 +1,10 @@
-interface Templeter {
+export interface Templeter {
   file: {
     selection: () => string | undefined;
   };
 }
 
-interface SelectionManager {
+export interface SelectionManager {
   getSelection: () => string | undefined;
 }
 

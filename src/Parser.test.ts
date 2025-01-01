@@ -3,6 +3,8 @@ import { resolve } from "node:path";
 import { Parser } from "./Parser";
 import { TaskParser } from "./TaskParser";
 import { Task, TaskStatus } from "./Task";
+import { writeFileSync } from "fs";
+import { format } from "prettier";
 
 const simpleTask = (title: string, parent: Task | null = null) =>
   new Task(
@@ -46,4 +48,23 @@ test("parser nested", async () => {
   const parser = new Parser(TaskParser);
 
   expect(parser.parseTaskFile(file)).toStrictEqual([list, []]);
+});
+
+test("tasks to string nested", async () => {
+  const file = `- [ ] parent1
+	- [ ] task11
+	- [ ] subparent12
+		- [ ] task121
+		- [ ] task122
+	- [ ] subparent13
+		- [ ] task131
+- [ ] task2
+- [ ] task3`;
+
+  const list = makeTaskList();
+  const parser = new Parser(TaskParser);
+
+  const result = parser.generateTaskFile(list);
+
+  expect(result).toBe(file);
 });

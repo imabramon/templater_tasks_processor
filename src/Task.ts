@@ -52,8 +52,18 @@ export class Task implements TreeNode {
     this.appendChild(children);
   }
 
+  // @ts-ignore
   public appendChild(task: Task) {
     task._parent = this;
     this._children.push(task);
+  }
+
+  public forEach(fn: (node: TreeNode, deep?: number) => void, deep = 0) {
+    fn(this, deep);
+    if (!this._children.length) return;
+
+    this._children.forEach((child) => {
+      child.forEach(fn, deep + 1);
+    });
   }
 }

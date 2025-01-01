@@ -20,6 +20,7 @@ export type EntityParserFn<T extends TreeNode> = (
 
 export interface TreeNode {
   appendChild: (child: TreeNode) => void;
+  forEach: (fn: (node: TreeNode, deep?: number) => void, deep?: number) => void;
 }
 
 export class Parser<T extends TreeNode> {
@@ -120,7 +121,7 @@ export class Parser<T extends TreeNode> {
     };
   }
 
-  parseTaskFile(lines: string): ParsingResult<T> {
+  public parseTaskFile(lines: string): ParsingResult<T> {
     const rootEntities: T[] = [];
     const errors: ParsingError[] = [];
 
@@ -145,5 +146,19 @@ export class Parser<T extends TreeNode> {
     });
 
     return [rootEntities, errors];
+  }
+
+  public generateTaskFile(entities: T[]) {
+    const rows: string[] = [];
+    entities.forEach((entity: T) => {
+      entity.forEach((sub: T, deep: number) => {
+        const tabs = Array.from({ length: deep })
+          .map(() => "	")
+          .join("");
+        rows.push(`${tabs}${this._parser.entityToString(sub)}`);
+      });
+    });
+
+    return rows.join("\n");
   }
 }
