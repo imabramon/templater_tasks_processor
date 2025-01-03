@@ -6,6 +6,7 @@ import {
   ErrorMessages,
 } from "./ParsingResult";
 import { Task } from "./Task";
+import { makeLogger } from "./utils";
 
 export type ParsingResult<T> = [T[], ParsingError[]];
 
@@ -23,6 +24,8 @@ export interface TreeNode {
   appendChild: (child: TreeNode) => void;
   forEach: (fn: (node: TreeNode, deep?: number) => void, deep?: number) => void;
 }
+
+const ParserLog = makeLogger();
 
 export class Parser<T extends TreeNode> {
   private get tabs() {
@@ -47,6 +50,7 @@ export class Parser<T extends TreeNode> {
   }
 
   parse(row: string, index: number): StringParsingResult<T> {
+    ParserLog("parsing trace", index, row);
     if (row.trim().length === 0) {
       return {
         type: StringParsingTypes.Skip,
@@ -99,7 +103,7 @@ export class Parser<T extends TreeNode> {
             this._additionalTabs -= dif - realTabs;
           }
 
-          this.stack.splice(tabs, dif);
+          this.stack.splice(tabs - this._additionalTabs, dif);
           parentID = this.getParentID();
           break;
         }
