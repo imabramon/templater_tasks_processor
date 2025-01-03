@@ -18,7 +18,7 @@ export enum ErrorMessages {
 
 export type ParsingError = {
   row: RowNumber;
-  message: ErrorMessages;
+  message: ErrorMessages | string;
 };
 
 interface ErrorString extends IStringParsingResult {

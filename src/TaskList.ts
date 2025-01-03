@@ -41,13 +41,9 @@ export class TaskList {
 
   // }
 
-  // deleteTags(tags){
+  deleteTags(tags: string): void {}
 
-  // }
-
-  // addTags(tags){
-
-  // }
+  addTags(tags: string): void {}
 
   // replaceTags(oldTags, newTags){
 

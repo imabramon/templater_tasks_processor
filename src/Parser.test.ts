@@ -2,17 +2,20 @@ import { readFile } from "fs/promises";
 import { resolve } from "node:path";
 import { Parser } from "./Parser";
 import { TaskParser } from "./TaskParser";
-import { Task, TaskStatus } from "./Task";
-import { writeFileSync } from "fs";
-import { format } from "prettier";
+import { Task, TaskCreateParams, TaskStatus } from "./Task";
 
-const simpleTask = (title: string, parent: Task | null = null) =>
+const simpleTask = (
+  title: string,
+  parent: Task | null = null,
+  options?: Partial<Omit<TaskCreateParams, "title">>
+) =>
   new Task(
     {
       title,
       status: TaskStatus.Todo,
       date: null,
       tags: [],
+      ...(options ?? {}),
     },
     parent
   );
@@ -38,7 +41,7 @@ const makeTaskList = () => {
   return [parent1, task2, task3];
 };
 
-test("parser nested", async () => {
+test("file to task list", async () => {
   const file = await readFile(
     resolve(__dirname, `./test_files/task_list.md`),
     "utf-8"
@@ -50,7 +53,7 @@ test("parser nested", async () => {
   expect(parser.parseTaskFile(file)).toStrictEqual([list, []]);
 });
 
-test("tasks to string nested", async () => {
+test("task list to file", async () => {
   const file = `- [ ] parent1
 	- [ ] task11
 	- [ ] subparent12
@@ -62,6 +65,54 @@ test("tasks to string nested", async () => {
 - [ ] task3`;
 
   const list = makeTaskList();
+  const parser = new Parser(TaskParser);
+
+  const result = parser.generateTaskFile(list);
+
+  expect(result).toBe(file);
+});
+
+const makeTaskListCurved = () => {
+  const task121 = simpleTask("task121", null, { deep: 2 });
+  const task122 = simpleTask("task122", null, { deep: 2 });
+
+  const subparent13 = simpleTask("subparent13", null, { deep: 1 });
+  const task131 = simpleTask("task131");
+  subparent13.append(task131);
+
+  const task2 = simpleTask("task2");
+
+  return [task121, task122, subparent13, task2];
+};
+
+test("file to task list curved", async () => {
+  const file = await readFile(
+    resolve(__dirname, `./test_files/task_list_curved.md`),
+    "utf-8"
+  );
+
+  const list = makeTaskListCurved();
+  const parser = new Parser(TaskParser);
+  const result = parser.parseTaskFile(file);
+  const errors = result[1];
+
+  if (errors) {
+    errors.forEach((error) =>
+      console.error(error.message, `in line ${error.row}`)
+    );
+  }
+
+  expect(result).toStrictEqual([list, []]);
+});
+
+test("task list to file curved", async () => {
+  const file = `		- [ ] task121
+		- [ ] task122
+	- [ ] subparent13
+		- [ ] task131
+- [ ] task2`;
+
+  const list = makeTaskListCurved();
   const parser = new Parser(TaskParser);
 
   const result = parser.generateTaskFile(list);

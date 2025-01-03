@@ -5,6 +5,7 @@ import {
   StringParsingTypes,
   ErrorMessages,
 } from "./ParsingResult";
+import { Task } from "./Task";
 
 export type ParsingResult<T> = [T[], ParsingError[]];
 
@@ -25,11 +26,13 @@ export interface TreeNode {
 
 export class Parser<T extends TreeNode> {
   private get tabs() {
-    return this.stack.length;
+    return this.stack.length + this._additionalTabs;
   }
   private stack: T[] = [];
   private prev: T | null = null;
   private _parser: EntityParser<T>;
+  private _firstParse = false;
+  private _additionalTabs = 0;
 
   constructor(Parser: new () => EntityParser<T>) {
     this._parser = new Parser();
@@ -80,12 +83,31 @@ export class Parser<T extends TreeNode> {
         }
         case tabs < this.tabs: {
           const dif = this.tabs - tabs;
+          const realTabs = this.stack.length;
+
+          if (dif > this.tabs) {
+            return {
+              type: StringParsingTypes.Error,
+              error: {
+                row: index,
+                message: `Diff cant be is greater than current tabs. Error in line${index}`,
+              },
+            };
+          }
+
+          if (dif > realTabs) {
+            this._additionalTabs -= dif - realTabs;
+          }
 
           this.stack.splice(tabs, dif);
           parentID = this.getParentID();
           break;
         }
-
+        case tabs > this.tabs && !this._firstParse: {
+          this._additionalTabs = tabs;
+          parentID = this.getParentID();
+          break;
+        }
         default: {
           return {
             type: StringParsingTypes.Error,
@@ -95,6 +117,11 @@ export class Parser<T extends TreeNode> {
             },
           };
         }
+      }
+      this._firstParse = true;
+      // Absolute Cinema
+      if (this._firstParse && this._additionalTabs && !this.stack.length) {
+        (entity as unknown as Task).deep = this._additionalTabs;
       }
 
       this.prev = entity;

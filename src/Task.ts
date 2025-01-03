@@ -12,6 +12,7 @@ export interface TaskCreateParams {
   tags: Tag[];
   status: TaskStatus;
   date: Date | null;
+  deep?: number;
 }
 
 export class Task implements TreeNode {
@@ -21,6 +22,7 @@ export class Task implements TreeNode {
   private _tags: Tag[];
   private _status: TaskStatus;
   private _date: Date | null;
+  public deep: number;
 
   public get title() {
     return this._title;
@@ -41,6 +43,7 @@ export class Task implements TreeNode {
     this._date = p.date;
     this._status = p.status;
     this._parent = parent;
+    this.deep = p.deep ?? 0;
   }
 
   public append(children: Task | Task[]) {
@@ -59,11 +62,11 @@ export class Task implements TreeNode {
   }
 
   public forEach(fn: (node: TreeNode, deep?: number) => void, deep = 0) {
-    fn(this, deep);
+    fn(this, deep + this.deep);
     if (!this._children.length) return;
 
     this._children.forEach((child) => {
-      child.forEach(fn, deep + 1);
+      child.forEach(fn, deep + this.deep + 1);
     });
   }
 }
