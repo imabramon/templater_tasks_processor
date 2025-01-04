@@ -2,6 +2,7 @@ import { Parser } from "./Parser";
 import { SelectionManager, TemplaterSelector, Templeter } from "./Selector";
 import { Task } from "./Task";
 import { TaskParser } from "./TaskParser";
+import { parseHashTags } from "./utils";
 
 export class TaskList {
   private _selector: SelectionManager;
@@ -41,9 +42,19 @@ export class TaskList {
 
   // }
 
-  deleteTags(tags: string): void {}
+  deleteTags(tagsStr: string): void {
+    const tags = parseHashTags(tagsStr);
+    this._rootTasks.forEach((root) => {
+      root.forEach((task: Task) => task.removeTags(tags));
+    });
+  }
 
-  addTags(tags: string): void {}
+  addTags(tagsStr: string): void {
+    const tags = parseHashTags(tagsStr);
+    this._rootTasks.forEach((root) => {
+      root.forEach((task: Task) => task.addTags(tags));
+    });
+  }
 
   // replaceTags(oldTags, newTags){
 

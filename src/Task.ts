@@ -1,4 +1,5 @@
 import { TreeNode } from "./Parser";
+import { pushUnion, removeBy } from "./utils";
 
 export type Tag = string;
 export enum TaskStatus {
@@ -68,5 +69,13 @@ export class Task implements TreeNode {
     this._children.forEach((child) => {
       child.forEach(fn, deep + this.deep + 1);
     });
+  }
+
+  public addTags(tags: string[]) {
+    this._tags = pushUnion(this._tags, tags);
+  }
+
+  public removeTags(tags: string[]) {
+    this._tags = removeBy(this._tags, tags);
   }
 }
