@@ -4,7 +4,7 @@ import { Task, TaskStatus } from "./Task";
 import { exist } from "./utils";
 
 const StatusRegEx = /- \[([ x-])\]/;
-const TagRegEx = /#(\w*)/g;
+const TagRegEx = /#([\wа-яА-Я]*)/g;
 const DateRegEx = /[✅❌]\s(\d{4}-\d{2}-\d{2})/;
 
 export class TaskParser implements EntityParser<Task> {
@@ -14,7 +14,6 @@ export class TaskParser implements EntityParser<Task> {
 
     const date = DateRegEx.exec(str)?.[1];
     const title = str
-      .replace(TagRegEx, "")
       .replace(StatusRegEx, "")
       .replaceAll(TagRegEx, "")
       .replace(DateRegEx, "")
