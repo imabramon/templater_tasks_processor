@@ -12,3 +12,13 @@ export const pushUnion = <T>(origin: T[], toPush: T[]) => {
   const withoutExisting = toPush.filter((el) => !origin.some((e) => e === el));
   return [...origin, ...withoutExisting];
 };
+
+export const parseHashTags = (str: string) => {
+  return str
+    .split(" ")
+    .map((tag) => {
+      const trimed = tag.trim();
+      return trimed[0] === "#" ? trimed.substring(1, trimed.length) : trimed;
+    })
+    .filter((tag) => tag.length);
+};
