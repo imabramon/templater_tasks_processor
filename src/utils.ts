@@ -22,3 +22,7 @@ export const parseHashTags = (str: string) => {
     })
     .filter((tag) => tag.length);
 };
+
+export const removeBy = <T>(origin: T[], items: T[]) => {
+  return origin.filter((el) => !items.some((e) => e === el));
+};
