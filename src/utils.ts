@@ -7,3 +7,8 @@ export const makeLogger =
   (...args: unknown[]) => {
     if (log) console.log(...args);
   };
+
+export const pushUnion = <T>(origin: T[], toPush: T[]) => {
+  const withoutExisting = toPush.filter((el) => !origin.some((e) => e === el));
+  return [...origin, ...withoutExisting];
+};
