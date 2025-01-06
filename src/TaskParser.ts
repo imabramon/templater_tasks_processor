@@ -4,7 +4,7 @@ import { Task, TaskStatus } from "./Task";
 import { exist } from "./utils";
 
 const StatusRegEx = /- \[([ x-])\]/;
-const TagRegEx = /#([\wа-яА-Я]*)/g;
+const TagRegEx = /#([\wа-яА-Я/]*)/g;
 const DateRegEx = /[✅❌]\s(\d{4}-\d{2}-\d{2})/;
 
 export class TaskParser implements EntityParser<Task> {
