@@ -9,10 +9,16 @@ export class TaskList {
   private _parser: Parser<Task>;
   private _rootTasks: Task[] = [];
 
-  constructor(tp: Templeter) {
-    this._selector = new TemplaterSelector(tp);
+  constructor(tp?: Templeter, list?: Task[]) {
     this._parser = new Parser(TaskParser);
-    this._parseMarkdown();
+    if (tp) {
+      this._selector = new TemplaterSelector(tp);
+      this._parseMarkdown();
+    }
+
+    if (list) {
+      this._rootTasks = list;
+    }
   }
 
   private _parseMarkdown() {
@@ -38,6 +44,10 @@ export class TaskList {
     return this._parser.generateTaskFile(this._rootTasks);
   }
 
+  public get rootTasks() {
+    return this._rootTasks;
+  }
+
   // sortBy(fn){
 
   // }
@@ -53,6 +63,25 @@ export class TaskList {
     const tags = parseHashTags(tagsStr);
     this._rootTasks.forEach((root) => {
       root.forEach((task: Task) => task.addTags(tags));
+    });
+  }
+
+  tagLikeParent(subtag: string): void {
+    this.forEach((task) => {
+      if (task.parent === null) return;
+
+      const parentTags = task.parent.tags;
+      const parentTag = parentTags.find((tag) => tag.includes(subtag));
+
+      if (!parentTag) return;
+
+      task.addTags([parentTag]);
+    });
+  }
+
+  forEach(fn: (node: Task) => void) {
+    this._rootTasks.forEach((root) => {
+      root.forEach(fn);
     });
   }
 

@@ -19,15 +19,12 @@ export interface TaskCreateParams {
 export class Task implements TreeNode {
   private _children: Task[] = [];
   private _parent: Task | null;
-  private _title: string;
+  public title: string;
   private _tags: Tag[];
   private _status: TaskStatus;
   private _date: Date | null;
   public deep: number;
 
-  public get title() {
-    return this._title;
-  }
   public get tags() {
     return this._tags;
   }
@@ -38,8 +35,12 @@ export class Task implements TreeNode {
     return this._date;
   }
 
+  public get parent() {
+    return this._parent;
+  }
+
   constructor(p: TaskCreateParams, parent: Task | null = null) {
-    this._title = p.title;
+    this.title = p.title;
     this._tags = p.tags;
     this._date = p.date;
     this._status = p.status;
