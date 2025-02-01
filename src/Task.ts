@@ -31,6 +31,9 @@ export class Task implements TreeNode {
   public get status() {
     return this._status;
   }
+  public set status(s: TaskStatus) {
+    this._status = s;
+  }
   public get date() {
     return this._date;
   }
@@ -78,5 +81,31 @@ export class Task implements TreeNode {
 
   public removeTags(tags: string[]) {
     this._tags = removeBy(this._tags, tags);
+  }
+
+  public get hasChildren(): boolean {
+    return !!this._children.length;
+  }
+
+  public removeChild(task: Task) {
+    this._children = this._children.filter((t) => t !== task);
+  }
+
+  public remove() {
+    const parent = this._parent;
+
+    if (!parent) return;
+
+    parent.removeChild(this);
+  }
+
+  public filter(fn: (node: Task) => boolean) {
+    if (this._children.length) {
+      this._children.forEach((child) => child.filter(fn));
+    }
+
+    if (!this._children.length && !fn(this)) {
+      this.remove();
+    }
   }
 }

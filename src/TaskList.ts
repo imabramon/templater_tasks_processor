@@ -1,6 +1,7 @@
+import * as _ from "lodash";
 import { Parser } from "./Parser";
 import { SelectionManager, TemplaterSelector, Templeter } from "./Selector";
-import { Task } from "./Task";
+import { Task, TaskStatus } from "./Task";
 import { TaskParser } from "./TaskParser";
 import { parseHashTags } from "./utils";
 
@@ -16,8 +17,8 @@ export class TaskList {
       this._parseMarkdown();
     }
 
-    if (list) {
-      this._rootTasks = list;
+    if (list && !tp) {
+      this._rootTasks = _.cloneDeep(list);
     }
   }
 
@@ -48,25 +49,21 @@ export class TaskList {
     return this._rootTasks;
   }
 
-  // sortBy(fn){
-
-  // }
-
-  deleteTags(tagsStr: string): void {
+  public deleteTags(tagsStr: string): void {
     const tags = parseHashTags(tagsStr);
     this._rootTasks.forEach((root) => {
       root.forEach((task: Task) => task.removeTags(tags));
     });
   }
 
-  addTags(tagsStr: string): void {
+  public addTags(tagsStr: string): void {
     const tags = parseHashTags(tagsStr);
     this._rootTasks.forEach((root) => {
       root.forEach((task: Task) => task.addTags(tags));
     });
   }
 
-  tagLikeParent(subtag: string): void {
+  public tagLikeParent(subtag: string): void {
     this.forEach((task) => {
       if (task.parent === null) return;
 
@@ -79,13 +76,34 @@ export class TaskList {
     });
   }
 
-  forEach(fn: (node: Task) => void) {
+  public forEach(fn: (node: Task) => void) {
     this._rootTasks.forEach((root) => {
       root.forEach(fn);
     });
   }
 
-  // replaceTags(oldTags, newTags){
+  public filter(fn: (node: Task) => boolean) {
+    this._rootTasks = this._rootTasks.filter((root) => {
+      root.filter(fn);
+      return root.hasChildren || fn(root);
+    });
+  }
 
-  // }
+  public devideByCompleted() {
+    const temp = new TaskList(undefined, this._rootTasks);
+
+    this.filter((task) => task.status === TaskStatus.Todo);
+    this.forEach((task) => {
+      task.status = TaskStatus.Todo;
+    });
+
+    temp.filter((task) => task.status !== TaskStatus.Todo);
+    temp.forEach((task) => {
+      if (task.status === TaskStatus.Todo) {
+        task.status = TaskStatus.Done;
+      }
+    });
+
+    this._rootTasks = [...this._rootTasks, ...temp._rootTasks];
+  }
 }
