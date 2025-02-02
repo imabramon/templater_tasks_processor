@@ -106,4 +106,41 @@ export class TaskList {
 
     this._rootTasks = [...this._rootTasks, ...temp._rootTasks];
   }
+
+  public makeCounter(length: number) {
+    if (this.rootTasks.length !== 1) {
+      throw new Error("expected 1 task selected");
+    }
+
+    const begin = this.rootTasks[0];
+    const isEmpty = !begin.title;
+
+    if (isEmpty && _.isNaN(+begin.title)) {
+      throw new Error("expected number or empty title");
+    }
+
+    const start = begin.title ? +begin.title : 1;
+    const deep = begin.deep;
+
+    if (isEmpty) {
+      begin.title = `${start}`;
+    }
+
+    if (begin.status === TaskStatus.Todo) {
+      length--;
+    }
+
+    Array.from({ length }).forEach((dummy, index) => {
+      const title = `${index + start + 1}`;
+      const task = new Task({
+        title,
+        status: TaskStatus.Todo,
+        tags: [],
+        date: null,
+        deep,
+      });
+
+      this.rootTasks.push(task);
+    });
+  }
 }

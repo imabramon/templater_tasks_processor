@@ -63,12 +63,14 @@ export const normalize = (str: string) => str.replace(/\r\n/g, "\n");
 export interface Test<T extends any[]> {
   name: string;
   args: T;
+  debugFileName?: string;
 }
 
 export type TestPreparator<T extends any[], R extends any[]> = (
   original: Test<T>,
   testFilesPath: string,
-  prefix?: string
+  prefix?: string,
+  debugFileName?: string
 ) => Test<R>;
 
 export const prepareTest: TestPreparator<[string, string], [string, string]> = (
@@ -80,6 +82,7 @@ export const prepareTest: TestPreparator<[string, string], [string, string]> = (
 
   return {
     name: `${prefix}${name}`,
+    debugFileName: original.debugFileName,
     args: original.args.map((file) => resolve(testFilesPath, file)) as [
       string,
       string,
