@@ -1,0 +1,5 @@
+- [ ] name 2
+- [ ] name 5
+- [x] name 1 #category/some1
+- [x] name 3 #category/some3
+- [ ] name 4 #category/some4

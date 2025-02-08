@@ -107,6 +107,25 @@ export class TaskList {
     this._rootTasks = [...this._rootTasks, ...temp._rootTasks];
   }
 
+  public devideByHasCategory(subtag: string) {
+    this.tagLikeParent(subtag);
+
+    const taskIds: [boolean, number][] = this._rootTasks.map((task, index) => {
+      const hasSubTag = task.tags.some((tag) => tag.includes(subtag));
+      return [hasSubTag, index];
+    });
+
+    const taskWithoutSubTag = taskIds
+      .filter(([hasSubTag]) => !hasSubTag)
+      .map(([_, index]) => index);
+    const taskWithSubTag = taskIds
+      .filter(([hasSubTag]) => hasSubTag)
+      .map(([_, index]) => index);
+    const newOrder = [...taskWithoutSubTag, ...taskWithSubTag];
+
+    this._rootTasks = newOrder.map((index) => this._rootTasks[index]);
+  }
+
   public makeCounter(length: number) {
     if (this.rootTasks.length !== 1) {
       throw new Error("expected 1 task selected");

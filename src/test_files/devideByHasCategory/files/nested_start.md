@@ -1,0 +1,6 @@
+- [x] name 1 #category/some1
+	- [x] sub 1
+	- [x] sub 2
+- [ ] name 2
+	- [ ] sub 3
+	- [ ] sub 4
