@@ -1,5 +1,5 @@
-import { Task, TaskCreateParams, TaskStatus } from "./Task";
-import { TaskParser } from "./TaskParser";
+import { Task, TaskCreateParams, TaskStatus } from "../Task";
+import { TaskParser } from "../TaskParser";
 
 interface TestCase<TestArgs extends unknown[], Result> {
   name: string;

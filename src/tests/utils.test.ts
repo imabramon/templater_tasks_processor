@@ -1,4 +1,4 @@
-import { parseHashTags, pushUnion, removeBy } from "./utils";
+import { parseHashTags, pushUnion, removeBy } from "../utils";
 
 test("union push", () => {
   const origin = [1, 2, 3, 4];

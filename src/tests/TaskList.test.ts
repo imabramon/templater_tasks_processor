@@ -1,5 +1,5 @@
-import { TaskList } from "./TaskList";
-import { makeTaskList, simpleTask } from "./testUtils";
+import { TaskList } from "../TaskList";
+import { makeTaskList, simpleTask } from "../testUtils";
 
 const makeTaskListWithNamesLength = () => {
   const parent1 = simpleTask("7");
