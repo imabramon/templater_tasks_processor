@@ -26,3 +26,6 @@ dist
 
 # Debug files
 *_result.md
+
+# Environment
+.env

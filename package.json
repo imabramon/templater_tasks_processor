@@ -1,12 +1,11 @@
 {
-  "name": "obsidian-sample-plugin",
+  "name": "templater-task-proccessor",
   "version": "1.0.0",
-  "description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+  "description": "This lib helps to work with tasks in Templater templates",
   "main": "main.js",
   "scripts": {
-    "dev": "nodemon",
-    "build:local": "rollup -c",
-    "build:vault:win": "rollup -c --file \"D:/Документы/Abr/Templater Scripts/TTP.js\"",
+    "build:local": "npx cross-env IGNORE_ENV=1 rollup -c",
+    "build:vault": "rollup -c",
     "test": "npx jest"
   },
   "keywords": [],
@@ -23,6 +22,7 @@
     "@types/node": "^16.11.6",
     "@typescript-eslint/eslint-plugin": "5.29.0",
     "@typescript-eslint/parser": "5.29.0",
+    "dotenv": "^16.4.7",
     "esbuild": "0.17.3",
     "rollup-plugin-cleanup": "^3.2.1",
     "rollup-plugin-copy": "^3.5.0",
