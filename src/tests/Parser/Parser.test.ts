@@ -1,12 +1,12 @@
 import { readFile } from "fs/promises";
 import { resolve } from "node:path";
-import { Parser } from "./Parser";
-import { TaskParser } from "./TaskParser";
-import { makeTaskList, simpleTask } from "./testUtils";
+import { Parser } from "../../Parser";
+import { TaskParser } from "../../TaskParser";
+import { makeTaskList, simpleTask } from "../../testUtils";
 
 test("file to task list", async () => {
   const file = await readFile(
-    resolve(__dirname, `./test_files/task_list.md`),
+    resolve(__dirname, `./files/task_list.md`),
     "utf-8"
   );
 
@@ -50,7 +50,7 @@ const makeTaskListCurved = () => {
 
 test("file to task list curved", async () => {
   const file = await readFile(
-    resolve(__dirname, `./test_files/task_list_curved.md`),
+    resolve(__dirname, `./files/task_list_curved.md`),
     "utf-8"
   );
 
@@ -106,7 +106,7 @@ const makeTaskListPartical = () => {
 
 test("file to task list partical", async () => {
   const file = await readFile(
-    resolve(__dirname, `./test_files/task_list_partical.md`),
+    resolve(__dirname, `./files/task_list_partical.md`),
     "utf-8"
   );
 
