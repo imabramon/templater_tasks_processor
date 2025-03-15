@@ -40,14 +40,15 @@ To execute the template, you don't need to separate the entire task list from th
 ## Add tags
 Enter the tags you want to add in the promt separated by a space. You can specify them with or without a hashtag.<br>
 <br>
-<b>Example<b><br>
-Origin selection
+<b>Example</b><br>
+Origin selection:
 ```
 - [ ] task 1
     - [ ] task 2
     - [ ] task 3
 ```
-promt: `tag1 #tag2`
+promt: `tag1 #tag2`<br>
+Result selection:
 ```
 - [ ] task 1 #tag1 #tag2
     - [ ] task 2 #tag1 #tag2
