@@ -144,7 +144,6 @@ Result selection:
 - [ ] 2
 - [ ] 3
 ```
-<br>
 Origin selection:
 ```
 - [x] 1
