@@ -32,7 +32,27 @@ This project is designed to conveniently work with tasks in custom Templater scr
 
 # Templates
 
+To make most of the templates work, you need to select the entire line, from beginning to end<br>
+To execute the template, you don't need to separate the entire task list from the root task.
+
+![Selection example](files/Selection.png)
+
 ## Add tags
+Enter the tags you want to add in the promt separated by a space. You can specify them with or without a hashtag.<br>
+<br>
+<b>Example<b><br>
+Origin selection
+```
+- [ ] task 1
+    - [ ] task 2
+    - [ ] task 3
+```
+promt: `tag1 #tag2`
+```
+- [ ] task 1 #tag1 #tag2
+    - [ ] task 2 #tag1 #tag2
+    - [ ] task 3 #tag1 #tag2
+```
 
 ## Remove tags
 
