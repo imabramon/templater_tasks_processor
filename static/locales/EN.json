@@ -1,0 +1,8 @@
+{
+  "addTags": {
+    "prompt": "Write the tags you want to add (you can write without a hashtag)"
+  },
+  "removeTags": {
+    "prompt": "Write the tags that you want to delete (you can write without a hashtag)"
+  }
+}

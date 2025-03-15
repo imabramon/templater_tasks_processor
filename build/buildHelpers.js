@@ -1,6 +1,8 @@
 const dotenv = require("dotenv");
+const { readFileSync } = require("fs");
 const { includes } = require("lodash");
 const path = require("path");
+const _ = require("lodash");
 
 const { resolve } = path;
 
@@ -8,6 +10,7 @@ const LOCAL_FOLDER_NAME = "./dist";
 const DEFAULT_SCRIPTS_FOLDER = "Scripts";
 const DEFAULT_TEMPLATES_FOLDER = "Templates";
 const DEFAULT_FILENAME = "TTP.js";
+const DEFAULT_LOCALE = "EN";
 
 const getVaultPath = () => {
   if (!!process.env.IGNORE_ENV) return LOCAL_FOLDER_NAME;
@@ -56,6 +59,7 @@ const getConfig = () => {
   const TEMPLATES_FOLDER =
     process.env.TEMPLATES_FOLDER ?? DEFAULT_TEMPLATES_FOLDER;
   const FILENAME = process.env.FILENAME ?? DEFAULT_FILENAME;
+  const locale = process.env.LOCALE ?? DEFAULT_LOCALE;
 
   const FILEPATH = resolve(VAULT_PATH, SCRIPTS_FOLDER, FILENAME);
   const TEMPLATES_PATH = resolve(VAULT_PATH, TEMPLATES_FOLDER);
@@ -70,6 +74,12 @@ const getConfig = () => {
 
   const mustacheConfig = {};
   mustacheConfig.userScriptCall = `tp.user['${FILENAME.replace(".js", "")}']()`;
+
+  const localeConfig = JSON.parse(
+    readFileSync(resolve(__dirname, `../static/locales/${locale}.json`))
+  );
+
+  _.merge(mustacheConfig, localeConfig);
 
   const mdTemplateConfig = {
     include: "static/templates/*.md",
