@@ -24,6 +24,8 @@
     "@typescript-eslint/parser": "5.29.0",
     "dotenv": "^16.4.7",
     "esbuild": "0.17.3",
+    "fast-glob": "^3.3.3",
+    "mustache": "^4.2.0",
     "rollup-plugin-cleanup": "^3.2.1",
     "rollup-plugin-copy": "^3.5.0",
     "storybook": "^8.3.5",
