@@ -131,6 +131,7 @@ Result selection:
 
 ## Counter
 Creates task counters. You need to select 1 task with a number. If the task is completed, it adds N new tasks starting from X+1, if not, it adds tasks up to N. X is the number in the highlighted task<br>
+If task description is empty starts with 1 and goes to N<br>
 <br>
 <b>Example</b><br>
 Origin selection:
