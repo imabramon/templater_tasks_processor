@@ -1,6 +1,6 @@
 <%*
 	const {TaskList} = {{&userScriptCall}};
 	const taskList  = new TaskList(tp);
-	taskList.tagLikeParent("категория/")
+	taskList.tagLikeParent("{{&category}}")
 	const selection = taskList.toString();
 %><%selection%>

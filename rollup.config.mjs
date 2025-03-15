@@ -6,12 +6,12 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import buildHelpers from "./build/buildHelpers.js";
 import mdTemplatePlugin from "./build/mdTemplatePlugin.js";
 
-const { FILEPATH, mdTemplateConfig } = buildHelpers.getConfig();
+const { filepath, mdTemplateConfig } = buildHelpers.getConfig();
 
 export default {
   input: "src/main.ts",
   output: {
-    file: FILEPATH,
+    file: filepath,
     format: "cjs",
   },
   external: ["obsidian"],

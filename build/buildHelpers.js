@@ -10,14 +10,15 @@ const DEFAULT_SCRIPTS_FOLDER = "Scripts";
 const DEFAULT_TEMPLATES_FOLDER = "Templates";
 const DEFAULT_FILENAME = "TTP.js";
 const DEFAULT_LOCALE = "EN";
+const DEFAULT_CATEGORY = "category";
 
 const getVaultPath = () => {
   if (!!process.env.IGNORE_ENV) return LOCAL_FOLDER_NAME;
 
-  const VAULT_PATH = process.env.VAULT_PATH;
-  if (!VAULT_PATH) throw new Error("VAULT_PATH is not defined");
+  const vaultPath = process.env.VAULT_PATH;
+  if (!vaultPath) throw new Error("VAULT_PATH is not defined");
 
-  return VAULT_PATH;
+  return vaultPath;
 };
 
 const envOrDefault = (env, def) => {
@@ -25,7 +26,6 @@ const envOrDefault = (env, def) => {
 };
 
 const getFileMappings = () => {
-  //
   const templateNameToEnvName = {
     addTags: "ADD_TAGS",
     removeTags: "REMOVE_TAGS",
@@ -57,6 +57,7 @@ const getConfig = () => {
     process.env.TEMPLATES_FOLDER ?? DEFAULT_TEMPLATES_FOLDER;
   const filename = process.env.FILENAME ?? DEFAULT_FILENAME;
   const locale = process.env.LOCALE ?? DEFAULT_LOCALE;
+  const category = process.env.CATEGORY ?? DEFAULT_CATEGORY;
 
   const filepath = resolve(vaultPath, scriptsFolder, filename);
   const templatesPath = resolve(vaultPath, templatesFolder);
@@ -71,6 +72,7 @@ const getConfig = () => {
 
   const mustacheConfig = {};
   mustacheConfig.userScriptCall = `tp.user['${filename.replace(".js", "")}']()`;
+  mustacheConfig.category = category;
 
   const localeConfig = JSON.parse(
     readFileSync(resolve(__dirname, `../static/locales/${locale}.json`))
@@ -86,7 +88,7 @@ const getConfig = () => {
   };
 
   return {
-    FILEPATH: filepath,
+    filepath,
     mdTemplateConfig,
   };
 };
