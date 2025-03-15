@@ -1,6 +1,5 @@
 const dotenv = require("dotenv");
 const { readFileSync } = require("fs");
-const { includes } = require("lodash");
 const path = require("path");
 const _ = require("lodash");
 
@@ -22,8 +21,6 @@ const getVaultPath = () => {
 };
 
 const envOrDefault = (env, def) => {
-  if (env === "ADD_TAGS_TEMPLATE_NAME")
-    console.log("calll", env, process.env[env]);
   return process.env[env] ?? def;
 };
 
@@ -53,27 +50,27 @@ const getFileMappings = () => {
 const getConfig = () => {
   dotenv.config();
 
-  const VAULT_PATH = getVaultPath();
+  const vaultPath = getVaultPath();
 
-  const SCRIPTS_FOLDER = process.env.SCRIPTS_FOLDER ?? DEFAULT_SCRIPTS_FOLDER;
-  const TEMPLATES_FOLDER =
+  const scriptsFolder = process.env.SCRIPTS_FOLDER ?? DEFAULT_SCRIPTS_FOLDER;
+  const templatesFolder =
     process.env.TEMPLATES_FOLDER ?? DEFAULT_TEMPLATES_FOLDER;
-  const FILENAME = process.env.FILENAME ?? DEFAULT_FILENAME;
+  const filename = process.env.FILENAME ?? DEFAULT_FILENAME;
   const locale = process.env.LOCALE ?? DEFAULT_LOCALE;
 
-  const FILEPATH = resolve(VAULT_PATH, SCRIPTS_FOLDER, FILENAME);
-  const TEMPLATES_PATH = resolve(VAULT_PATH, TEMPLATES_FOLDER);
-  const TEMPLATE_NAME_MAPPINGS = getFileMappings();
+  const filepath = resolve(vaultPath, scriptsFolder, filename);
+  const templatesPath = resolve(vaultPath, templatesFolder);
+  const templateNamesMapping = getFileMappings();
 
   const resolveFileName = (filename) => {
-    if (!(filename in TEMPLATE_NAME_MAPPINGS))
+    if (!(filename in templateNamesMapping))
       throw new Error(`${filename} is not in TEMPLATE_NAME_MAPPINGS`);
 
-    return TEMPLATE_NAME_MAPPINGS[filename];
+    return templateNamesMapping[filename];
   };
 
   const mustacheConfig = {};
-  mustacheConfig.userScriptCall = `tp.user['${FILENAME.replace(".js", "")}']()`;
+  mustacheConfig.userScriptCall = `tp.user['${filename.replace(".js", "")}']()`;
 
   const localeConfig = JSON.parse(
     readFileSync(resolve(__dirname, `../static/locales/${locale}.json`))
@@ -83,13 +80,13 @@ const getConfig = () => {
 
   const mdTemplateConfig = {
     include: "static/templates/*.md",
-    outputDir: TEMPLATES_PATH,
+    outputDir: templatesPath,
     resolveFileName,
     mustacheConfig,
   };
 
   return {
-    FILEPATH,
+    FILEPATH: filepath,
     mdTemplateConfig,
   };
 };
