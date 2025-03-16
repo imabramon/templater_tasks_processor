@@ -58,6 +58,7 @@ const getConfig = () => {
   const filename = process.env.FILENAME ?? DEFAULT_FILENAME;
   const locale = process.env.LOCALE ?? DEFAULT_LOCALE;
   const category = process.env.CATEGORY ?? DEFAULT_CATEGORY;
+  const shouldBuildTemplates = !process.env.ONLY_SCRIPT;
 
   const filepath = resolve(vaultPath, scriptsFolder, filename);
   const templatesPath = resolve(vaultPath, templatesFolder);
@@ -90,6 +91,7 @@ const getConfig = () => {
   return {
     filepath,
     mdTemplateConfig,
+    shouldBuildTemplates,
   };
 };
 

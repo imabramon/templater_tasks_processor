@@ -6,7 +6,22 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import buildHelpers from "./build/buildHelpers.js";
 import mdTemplatePlugin from "./build/mdTemplatePlugin.js";
 
-const { filepath, mdTemplateConfig } = buildHelpers.getConfig();
+const { filepath, mdTemplateConfig, shouldBuildTemplates } =
+  buildHelpers.getConfig();
+
+const plugins = [
+  typescript(),
+  nodeResolve(),
+  babel({
+    presets: ["@babel/preset-typescript"],
+  }),
+  commonjs(),
+  cleanup(),
+];
+
+if (shouldBuildTemplates) {
+  plugins.push(mdTemplatePlugin(mdTemplateConfig));
+}
 
 export default {
   input: "src/main.ts",
@@ -15,14 +30,5 @@ export default {
     format: "cjs",
   },
   external: ["obsidian"],
-  plugins: [
-    typescript(),
-    nodeResolve(),
-    babel({
-      presets: ["@babel/preset-typescript"],
-    }),
-    mdTemplatePlugin(mdTemplateConfig),
-    commonjs(),
-    cleanup(),
-  ],
+  plugins,
 };

@@ -15,8 +15,10 @@ Avaliable templates:
 
 # Manual build guide
 `npm install` - instalation, before any build<br>
-`npm run build:local` - building to dist folder <br>
-`npm run build:vault` - building by .env variables
+`npm run build-all:local` - building all to dist folder <br>
+`npm run build-all:vault` - building all by .env variables<br>
+`npm run build-script:local` - building only script to dist folder <br>
+`npm run build-script:vault` - building only script by .env variables
 
 # ENV Variables
 

@@ -4,8 +4,10 @@
   "description": "This lib helps to work with tasks in Templater templates",
   "main": "main.js",
   "scripts": {
-    "build:local": "npx cross-env IGNORE_ENV=1 rollup -c",
-    "build:vault": "rollup -c",
+    "build-all:local": "npx cross-env IGNORE_ENV=1 rollup -c",
+    "build-all:vault": "rollup -c",
+    "build-script:local": "npx cross-env IGNORE_ENV=1 ONLY_SCRIPT=1 rollup -c",
+    "build-script:vault": "npx cross-env ONLY_SCRIPT=1 rollup -c",
     "test": "npx jest"
   },
   "keywords": [],
