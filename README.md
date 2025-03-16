@@ -157,3 +157,52 @@ Result selection:
 - [ ] 3
 - [ ] 4
 ```
+
+# JS API
+
+## Task
+
+```
+interface TaskCreateParams {
+  title: string; // Task description
+  tags: Tag[]; // Tags
+  status: TaskStatus; // Task status
+  date: Date | null; // Completion or cancellation date
+}
+
+enum TaskStatus {
+  Done, // 0
+  Canceled, // 1
+  Todo, // 2
+}
+```
+
+| Method        | Args                                                         | Description                                      |
+| ------------- | ------------------------------------------------------------ | ------------------------------------------------ |
+| `constructor` | `p: TaskCreateParams, parent?: Task`                         | Creates a new task and sets its properties.      |
+| `append`      | `children: Task \| Task[]`                                   | Adds one or more subtasks.                       |
+| `appendChild` | `task: Task`                                                 | Adds a subtask.                                  |
+| `forEach`     | `fn: (node: TreeNode, deep?: number) => void, deep?: number` | Iterates through all task tree nodes.            |
+| `addTags`     | `tags: string[]`                                             | Adds tags to the task.                           |
+| `removeTags`  | `tags: string[]`                                             | Removes tags from the task.                      |
+| `removeChild` | `task: Task`                                                 | Removes the specified subtask.                   |
+| `remove`      | `—`                                                          | Removes the current task from the parent task.   |
+| `filter`      | `fn: (node: Task) => boolean`                                | Filters tasks, removing those that do not match. |
+| `hasChildren` | `—`                                                          | Returns `true` if the task has subtasks.         |
+
+## TaskList
+
+| Method name                 | Args                                                                         | Description                                                                                                                                                          |
+| --------------------------- | ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `constructor`               | `tp: TemplaterPlugin, list?: TaskList`                                      | If `tp` is provided, creates a list from the current selection. If `list` is provided, creates a deep copy of the given list. Either `tp` or `list` must be specified. |
+| `addTags`                   | `tagsStr: string` - String with tags from the prompt                       | Similar to the template.                                                                                                                                             |
+| `deleteTags`                | `tagsStr: string` - String with tags from the prompt                       | Similar to the template.                                                                                                                                             |
+| `tagLikeParent`             | `subTag: string` - Part of the tag used for copying the tag from the parent task | Similar to the template.                                                                                                                                             |
+| `devideByCompleted`         | `—`                                                                        | Similar to the template.                                                                                                                                             |
+| `devideByHasCategory`       | `subTag: string` - Part of the tag used for copying the tag from the parent task | Similar to the template.                                                                                                                                             |
+| `makeCounter`               | `length: number` - Counter length                                          | Similar to the template.                                                                                                                                             |
+| `get rootTasks`             | Returns `Task[]`                                                            | Retrieves root tasks.                                                                                                                                                |
+| `toString`                  | Returns `string`                                                            | Retrieves the markdown representation of the task list.                                                                                                              |
+| `forEach`                   | `fn: (task: Task) => void` - Handler                                       | Similar to `Array.forEach`, etc.                                                                                                                                     |
+| `filter`                    | `fn: (task: Task) => boolean` - Handler                                   | Similar to `Array.filter`, etc.                                                                                                                                      |
+
