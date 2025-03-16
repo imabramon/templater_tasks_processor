@@ -10,6 +10,7 @@ Avaliable templates:
 - counter
 - tags like parent (use category env var)
 - devide by category (use category env var)
+<br>
 [Just download script and templates](https://github.com/imabramon/templater_tasks_processor/releases)
 
 # Manual build guide
