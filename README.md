@@ -1,6 +1,7 @@
 # Summary
 
 This project is designed to conveniently work with tasks in custom Templater scripts.<br>
+Templater is a plugin that allows you to create your own templates. [See more](https://github.com/SilentVoid13/Templater?tab=readme-ov-file)<br>
 You can use standard templates or create your own by JS API.<br>
 Avaliable templates:
 - add Tags
@@ -9,6 +10,7 @@ Avaliable templates:
 - counter
 - tags like parent (use category env var)
 - devide by category (use category env var)
+[Just download script and templates](https://github.com/imabramon/templater_tasks_processor/releases)
 
 # Manual build guide
 `npm install` - instalation, before any build<br>
@@ -119,7 +121,7 @@ Result selection:
 - [-] task 2
 ```
 
-## Devide by has tags
+## Devide by has category
 Uses category<br>
 Divides tasks into tasks that have a category and those that do not have Tasks without a category at the top<br>
 <br>
