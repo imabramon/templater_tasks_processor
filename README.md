@@ -160,6 +160,11 @@ Result selection:
 
 # JS API
 
+## Use in Templater Templates
+
+`const {TaskList} = tp.user.TTP();` or `const {TaskList} = tp.user['CUSTOM FILENAME']();`<br>
+You can add FILENAME var to .env to customize script name
+
 ## Task
 
 ```
