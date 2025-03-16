@@ -1,6 +1,14 @@
 # Summary
 
-This project is designed to conveniently work with tasks in custom Templater scripts.
+This project is designed to conveniently work with tasks in custom Templater scripts.<br>
+You can use standard templates or create your own by JS API.<br>
+Avaliable templates:
+- add Tags
+- remove Tags
+- devide by completed
+- counter
+- tags like parent (use category env var)
+- devide by category (use category env var)
 
 # Manual build guide
 `npm install` - instalation, before any build<br>
