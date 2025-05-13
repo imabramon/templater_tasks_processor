@@ -89,7 +89,7 @@ export class TaskList {
     });
   }
 
-  public devideByCompleted() {
+  public devideByCompleted(completedOnTop?: boolean) {
     const temp = new TaskList(undefined, this._rootTasks);
 
     this.filter((task) => task.status === TaskStatus.Todo);
@@ -103,6 +103,11 @@ export class TaskList {
         task.status = TaskStatus.Done;
       }
     });
+
+    if (completedOnTop) {
+      this._rootTasks = [...temp._rootTasks, ...this._rootTasks];
+      return;
+    }
 
     this._rootTasks = [...this._rootTasks, ...temp._rootTasks];
   }
