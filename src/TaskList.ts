@@ -76,9 +76,9 @@ export class TaskList {
     });
   }
 
-  public forEach(fn: (node: Task) => void) {
+  public forEach(fn: (node: Task) => void, isChildrenFirst = false) {
     this._rootTasks.forEach((root) => {
-      root.forEach(fn);
+      root.forEach(fn, undefined, isChildrenFirst);
     });
   }
 
@@ -175,5 +175,46 @@ export class TaskList {
       task.date = _date;
       task.status = TaskStatus.Canceled;
     });
+  }
+
+  public forceClose(){
+    const today =  new Date();
+    this.forEach((task) => {
+      if (task.status !== TaskStatus.Todo) return;
+
+      let nearestCompletedTask: Task | null = null;
+
+      const setNearestDate = (task: Task) => {
+        if (task.date === null) return;
+
+        if (
+          nearestCompletedTask === null ||
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          task.date.getTime() > nearestCompletedTask.date!.getTime()
+        ) {
+          nearestCompletedTask = task;
+          return;
+        }
+      };
+
+      task.children.forEach((child) => {
+        if (child.status === TaskStatus.Done) {
+          setNearestDate(child);
+          return;
+        }
+      });
+
+      console.log(nearestCompletedTask);
+
+      if (nearestCompletedTask !== null) {
+        task.status = TaskStatus.Done;
+        // @ts-ignore
+        task.date = nearestCompletedTask.date;
+        return;
+      }
+
+      task.status = TaskStatus.Canceled;
+      task.date = today;
+    }, true);
   }
 }

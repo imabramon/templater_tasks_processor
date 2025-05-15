@@ -17,7 +17,7 @@ export interface TaskCreateParams {
 }
 
 export class Task implements TreeNode {
-  private _children: Task[] = [];
+  public children: Task[] = [];
   private _parent: Task | null;
   public title: string;
   private _tags: Tag[];
@@ -60,16 +60,27 @@ export class Task implements TreeNode {
   // @ts-ignore
   public appendChild(task: Task) {
     task._parent = this;
-    this._children.push(task);
+    this.children.push(task);
   }
 
-  public forEach(fn: (node: TreeNode, deep?: number) => void, deep = 0) {
-    fn(this, deep + this.deep);
-    if (!this._children.length) return;
+  public forEach(
+    fn: (node: TreeNode, deep?: number) => void,
+    deep = 0,
+    isChildrenFirst = false
+  ) {
+    if (!isChildrenFirst || !this.children.length) {
+      fn(this, deep + this.deep);
+    }
 
-    this._children.forEach((child) => {
-      child.forEach(fn, deep + this.deep + 1);
+    if (!this.children.length) return;
+
+    this.children.forEach((child) => {
+      child.forEach(fn, deep + this.deep + 1, isChildrenFirst);
     });
+
+    if (isChildrenFirst) {
+      fn(this, deep + this.deep);
+    }
   }
 
   public addTags(tags: string[]) {
@@ -81,11 +92,11 @@ export class Task implements TreeNode {
   }
 
   public get hasChildren(): boolean {
-    return !!this._children.length;
+    return !!this.children.length;
   }
 
   public removeChild(task: Task) {
-    this._children = this._children.filter((t) => t !== task);
+    this.children = this.children.filter((t) => t !== task);
   }
 
   public remove() {
@@ -97,11 +108,11 @@ export class Task implements TreeNode {
   }
 
   public filter(fn: (node: Task) => boolean) {
-    if (this._children.length) {
-      this._children.forEach((child) => child.filter(fn));
+    if (this.children.length) {
+      this.children.forEach((child) => child.filter(fn));
     }
 
-    if (!this._children.length && !fn(this)) {
+    if (!this.children.length && !fn(this)) {
       this.remove();
     }
   }
