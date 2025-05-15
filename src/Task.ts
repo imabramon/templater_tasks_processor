@@ -22,7 +22,7 @@ export class Task implements TreeNode {
   public title: string;
   private _tags: Tag[];
   private _status: TaskStatus;
-  private _date: Date | null;
+  public date: Date | null;
   public deep: number;
 
   public get tags() {
@@ -34,9 +34,6 @@ export class Task implements TreeNode {
   public set status(s: TaskStatus) {
     this._status = s;
   }
-  public get date() {
-    return this._date;
-  }
 
   public get parent() {
     return this._parent;
@@ -45,7 +42,7 @@ export class Task implements TreeNode {
   constructor(p: TaskCreateParams, parent: Task | null = null) {
     this.title = p.title;
     this._tags = p.tags;
-    this._date = p.date;
+    this.date = p.date;
     this._status = p.status;
     this._parent = parent;
     this.deep = p.deep ?? 0;

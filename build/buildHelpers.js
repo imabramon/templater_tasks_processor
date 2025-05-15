@@ -33,6 +33,7 @@ const getFileMappings = () => {
     devideByCompleted: "DEVIDE_BY_COMPLETED",
     devideByHasCategory: "DEVIDE_BY_HAS_CATEGORY",
     counter: "COUNTER",
+    cancelNow: "CANCEL_NOW",
   };
 
   const mappings = {};

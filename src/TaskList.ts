@@ -167,4 +167,13 @@ export class TaskList {
       this.rootTasks.push(task);
     });
   }
+
+  public cancel(date?: string) {
+    const _date = date !== undefined ? new Date(date) : new Date();
+
+    this.forEach((task) => {
+      task.date = _date;
+      task.status = TaskStatus.Canceled;
+    });
+  }
 }
